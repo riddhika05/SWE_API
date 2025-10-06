@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # frontend URL(s)
+    allow_origins=["https://swe-nu.vercel.app/"],  # frontend URL(s)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
