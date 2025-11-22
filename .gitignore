@@ -1,0 +1,23 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.class
+*.so
+
+# Coverage artifacts
+*.gcda
+*.gcno
+*.gcov
+coverage_output/
+.coverage
+htmlcov/
+
+# Test artifacts
+.pytest_cache/
+.tox/
+
+# IDE
+.vscode/
+.idea/
+*.swp

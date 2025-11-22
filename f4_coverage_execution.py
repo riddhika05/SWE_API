@@ -139,34 +139,46 @@ class UncoveredBranchesResponse(BaseModel):
 
 def compile_with_gcov(source_file: str, compiler: str, output_dir: str) -> tuple:
     """Compile with coverage flags"""
-    os.makedirs(output_dir, exist_ok=True)
+    start = time.time()
+    
+    # Create output directory with full path resolution
+    output_path = Path(output_dir).resolve()
+    output_path.mkdir(parents=True, exist_ok=True)
     
     base_name = Path(source_file).stem
-    binary_path = os.path.join(output_dir, f"{base_name}_instrumented")
     
+    # Use .exe extension on Windows
+    import platform
+    binary_name = f"{base_name}_instrumented"
+    if platform.system() == "Windows":
+        binary_name += ".exe"
+    
+    binary_path = output_path / binary_name
+    
+    # Convert all paths to absolute strings for GCC
     compile_cmd = [
         compiler,
-        "--coverage",  # -fprofile-arcs -ftest-coverage
+        "--coverage",
         "-g",
-        source_file,
-        "-o", binary_path
+        str(Path(source_file).resolve()),  # Absolute source path
+        "-o", str(binary_path)              # Absolute binary path
     ]
     
-    start = time.time()
     try:
+        # Don't change cwd - use absolute paths instead
         result = subprocess.run(
             compile_cmd,
             capture_output=True,
             text=True,
-            timeout=60,
-            cwd=output_dir
+            timeout=60
         )
         comp_time = time.time() - start
         success = result.returncode == 0
-        return success, binary_path if success else None, result.stderr, comp_time
+        
+        return success, str(binary_path) if success else None, result.stderr, comp_time
+        
     except Exception as e:
         return False, None, str(e), time.time() - start
-
 
 def execute_test(binary: str, inputs: List[str], work_dir: str) -> tuple:
     """Run instrumented binary"""
