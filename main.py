@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from typing import Dict, Any
 from parser import parse_c_code
 from cfg_generator import generate_cfg_from_ir
+from tarantula_fault_localization import tara
 from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 app.add_middleware(

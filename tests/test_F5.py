@@ -1,6 +1,10 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import pytest
 from fastapi.testclient import TestClient
-from SWE_API.tarantula_fault_localization import app
+from tarantula_fault_localization import app
 
 client = TestClient(app)
 

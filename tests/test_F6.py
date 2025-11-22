@@ -1,6 +1,7 @@
+
 import pytest
 from fastapi.testclient import TestClient
-from SWE_API.F6 import app
+from F6 import app
 import os
 
 client = TestClient(app)
