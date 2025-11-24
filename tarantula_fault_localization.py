@@ -1,8 +1,13 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import List, Dict
 
-app = FastAPI()
+# --- FIX: Define and export the router ---
+# The main application (main.py) expects this object name for imports.
+router = APIRouter(
+    prefix="/tarantula", 
+    tags=["Fault Localization"]
+)
 
 class LineCoverage(BaseModel):
     line_number: int
@@ -14,10 +19,18 @@ class FaultLocalizationRequest(BaseModel):
 
 
 def tarantula_score(failed, passed, total_failed, total_passed):
+    """
+    Calculates the Tarantula suspiciousness score for a line of code.
+    
+    Formula: (Failed_ratio) / (Failed_ratio + Passed_ratio)
+    where Ratio = count / total_count.
+    """
     if failed == 0 and passed == 0:
         return 0.0
 
+    # Calculate failed ratio (fraction of total failed tests that executed this line)
     failed_ratio = failed / total_failed if total_failed > 0 else 0
+    # Calculate passed ratio (fraction of total passed tests that executed this line)
     passed_ratio = passed / total_passed if total_passed > 0 else 0
 
     denom = failed_ratio + passed_ratio
@@ -26,8 +39,12 @@ def tarantula_score(failed, passed, total_failed, total_passed):
 
     return failed_ratio / denom
 
-@app.post("/fault-localization/tarantula")
+# --- FIX: Use router.post decorator ---
+@router.post("/fault-localization/tarantula")
 def apply_tarantula(request: FaultLocalizationRequest):
+    """
+    Endpoint for F5: Calculates the Tarantula suspiciousness score for each covered line.
+    """
 
     # Count totals for Tarantula percentage calculation
     total_failed = sum(1 for status in request.test_results.values() if status == "fail")
@@ -71,4 +88,3 @@ def apply_tarantula(request: FaultLocalizationRequest):
         "total_failed_tests": total_failed,
         "total_passed_tests": total_passed
     }
-

@@ -1,10 +1,16 @@
-
 import pytest
+import tempfile
+import os
 from fastapi.testclient import TestClient
-from F6 import app
+from fastapi import FastAPI # Needed to create temporary app
+from F6 import router # *** FIX: Import 'router' instead of 'app' ***
 import os
 
-client = TestClient(app)
+# --- FIX: Create a temporary app to host the router for testing ---
+temp_app = FastAPI()
+temp_app.include_router(router)
+client = TestClient(temp_app)
+# -----------------------------------------------------------------
 
 # Helper: create a temporary source file
 TEST_FILE = "sample.c"
@@ -29,6 +35,7 @@ def teardown_module(module):
 # Test 1: Basic valid report
 # -----------------
 def test_f6_basic():
+    # Note: The test path is now relative to the router's prefix: /fault-localization/report
     payload = {
         "suspiciousness_scores": [
             {"line_number": 2, "suspiciousness": 0.75}

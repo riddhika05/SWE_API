@@ -1,12 +1,18 @@
 import sys
 import os
+# Ensure imports from parent directory work
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import pytest
 from fastapi.testclient import TestClient
-from tarantula_fault_localization import app
+from fastapi import FastAPI # Needed to create a temporary app for the router
+from tarantula_fault_localization import router # Correctly import the router
 
-client = TestClient(app)
+# --- FIX: Create a temporary app to host the router for testing ---
+temp_app = FastAPI()
+temp_app.include_router(router)
+client = TestClient(temp_app)
+# -----------------------------------------------------------------
 
 # -----------------
 # Test 1: Basic Normal Case
@@ -21,7 +27,7 @@ def test_f5_basic():
         "test_results": {"t1": "fail", "t2": "pass", "t3": "fail"}
     }
 
-    response = client.post("/fault-localization/tarantula", json=payload)
+    response = client.post("/tarantula/fault-localization/tarantula", json=payload) # Note the prefix in the URL
     assert response.status_code == 200
 
     data = response.json()
@@ -39,7 +45,7 @@ def test_f5_no_failed_tests():
         "test_results": {"t1": "pass", "t2": "pass"}
     }
 
-    response = client.post("/fault-localization/tarantula", json=payload)
+    response = client.post("/tarantula/fault-localization/tarantula", json=payload) # Note the prefix
     assert response.status_code == 200
     data = response.json()
 
@@ -58,7 +64,7 @@ def test_f5_no_passed_tests():
         "test_results": {"t1": "fail", "t2": "fail"}
     }
 
-    response = client.post("/fault-localization/tarantula", json=payload)
+    response = client.post("/tarantula/fault-localization/tarantula", json=payload) # Note the prefix
     assert response.status_code == 200
     data = response.json()
 
@@ -77,7 +83,7 @@ def test_f5_line_no_test_execution():
         "test_results": {"t1": "pass", "t2": "fail"}
     }
 
-    response = client.post("/fault-localization/tarantula", json=payload)
+    response = client.post("/tarantula/fault-localization/tarantula", json=payload) # Note the prefix
     data = response.json()
 
     assert data["suspiciousness_scores"][0]["suspiciousness"] == 0.0
@@ -94,7 +100,7 @@ def test_f5_unknown_testname():
         "test_results": {"t1": "pass"}
     }
 
-    response = client.post("/fault-localization/tarantula", json=payload)
+    response = client.post("/tarantula/fault-localization/tarantula", json=payload) # Note the prefix
     data = response.json()
 
     assert data["suspiciousness_scores"][0]["failed_count"] == 0

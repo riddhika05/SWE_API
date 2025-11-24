@@ -2,10 +2,13 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 import uuid
 import random
+
 # Add at top:
 from f3_fitness_evaluation import router as f3_router
 from f4_coverage_execution import router as f4_router
-from tarantula_fault_localization import tara
+from tarantula_fault_localization import router as f5_router
+from F6 import router as f6_router
+
 # After app creation:
 
 from models import (
@@ -21,6 +24,8 @@ app = FastAPI(title="Automated Test Case Generator")
 
 app.include_router(f3_router)
 app.include_router(f4_router)
+app.include_router(f5_router,prefix="/api")
+app.include_router(f6_router,prefix="/api")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://swe-nu.vercel.app", "https://swe-nu.vercel.app/"],
