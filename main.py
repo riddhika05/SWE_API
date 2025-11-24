@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 import uuid
 import random
 
@@ -11,7 +12,19 @@ from cfg_parser import analyze_cpp_code
 import genetic_engine as engine
 
 app = FastAPI(title="Automated Test Case Generator")
+# Add CORS from integration branch at the top:
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://swe-nu.vercel.app", "https://swe-nu.vercel.app/"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+@app.get("/")
+async def root():
+    """Returns a simple status message for health checks and CORS tests."""
+    return {"status": "ok", "message": "API is running"}
 # --- F1 ENDPOINT: PARSE CODE ---
 @app.post("/analysis/generate-cfg", response_model=CFGOutput, status_code=status.HTTP_201_CREATED, tags=["F1"])
 async def generate_cfg(data: SourceCodeInput):
