@@ -1,21 +1,40 @@
-# Python artifacts
-# --------------------
+# ----------------------------------------
+# PYTHON / BUILD ARTIFACTS
+# ----------------------------------------
+# Compiled Python files and cache
 __pycache__/
 *.pyc
+*.pyo
 *.pyd
 *.so
+*.class
 
-# Testing and Coverage artifacts (pytest, code coverage tools like gcov/lcov)
-# --------------------------------------------------------------------------
+# ----------------------------------------
+# TESTING AND COVERAGE ARTIFACTS
+# ----------------------------------------
+# Pytest and general testing cache/output
 .pytest_cache/
+.tox/
+
+# Coverage files and directories
+.coverage
+htmlcov/
 coverage_output/
-*.gcno
+
+# GCC/GCOV/LCOV coverage files (C/C++ used in analysis)
 *.gcda
+*.gcno
 *.gcov
 test_instrumented.exe
 
-# Operating System artifacts
-# --------------------------
-# Usually hidden, but good practice to include
-.DS_Store
-Thumbs.db
+# ----------------------------------------
+# IDE AND OS ARTIFACTS
+# ----------------------------------------
+# IDE-specific directories and files
+.vscode/
+.idea/
+*.swp         # Vim swap files
+
+# Operating System files
+.DS_Store     # macOS
+Thumbs.db     # Windows
