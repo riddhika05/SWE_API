@@ -1,3 +1,21 @@
-# Ignore Python bytecode files
+# Python artifacts
+# --------------------
 __pycache__/
 *.pyc
+*.pyd
+*.so
+
+# Testing and Coverage artifacts (pytest, code coverage tools like gcov/lcov)
+# --------------------------------------------------------------------------
+.pytest_cache/
+coverage_output/
+*.gcno
+*.gcda
+*.gcov
+test_instrumented.exe
+
+# Operating System artifacts
+# --------------------------
+# Usually hidden, but good practice to include
+.DS_Store
+Thumbs.db
