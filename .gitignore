@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ----------------------------------------
 # PYTHON / BUILD ARTIFACTS
 # ----------------------------------------
@@ -39,8 +38,3 @@ test_instrumented.exe
 # Operating System files
 .DS_Store     # macOS
 Thumbs.db     # Windows
-=======
-# Ignore Python bytecode files
-__pycache__/
-*.pyc
->>>>>>> feature/f5-f6-implementation
