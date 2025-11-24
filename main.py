@@ -5,7 +5,7 @@ import random
 # Add at top:
 from f3_fitness_evaluation import router as f3_router
 from f4_coverage_execution import router as f4_router
-
+from tarantula_fault_localization import tara
 # After app creation:
 
 from models import (
