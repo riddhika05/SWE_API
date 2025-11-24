@@ -1,0 +1,40 @@
+# ----------------------------------------
+# PYTHON / BUILD ARTIFACTS
+# ----------------------------------------
+# Compiled Python files and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.class
+
+# ----------------------------------------
+# TESTING AND COVERAGE ARTIFACTS
+# ----------------------------------------
+# Pytest and general testing cache/output
+.pytest_cache/
+.tox/
+
+# Coverage files and directories
+.coverage
+htmlcov/
+coverage_output/
+
+# GCC/GCOV/LCOV coverage files (C/C++ used in analysis)
+*.gcda
+*.gcno
+*.gcov
+test_instrumented.exe
+
+# ----------------------------------------
+# IDE AND OS ARTIFACTS
+# ----------------------------------------
+# IDE-specific directories and files
+.vscode/
+.idea/
+*.swp         # Vim swap files
+
+# Operating System files
+.DS_Store     # macOS
+Thumbs.db     # Windows
